@@ -1,4 +1,4 @@
-THIS IS A TEST
+import string
 #########################
 #  LanguageHelper class
 #########################
@@ -23,8 +23,15 @@ class LanguageHelper:
             return False
 
     def getSuggestions(self,query):
-        g
-        
+        self._possible = []
+        self._alphabet = list(string.ascii_lowercase)
+        for i in range(len(query)):
+            possible = query[:i] + query[(i+1):]
+            self._possible.append(possible)
+            for g in range(len(self._alphabet)):
+                possible = self._alphabet[g]
+                self._possible.append(possible)
+        print(self._possible)
 
 #########################
 #  Unit Testing
