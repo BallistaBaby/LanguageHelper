@@ -66,31 +66,42 @@ class LanguageHelper:
 if __name__ == '__main__':
     helper = LanguageHelper ('English.txt')
 
-    if ('dogs' in helper):
-        print('Found "dogs"')
+    #if ('dogs' in helper):
+    #    print('Found "dogs"')
 
-    if ('missouri' in helper):
-        print('wrong')
+    #if ('missouri' in helper):
+    #    print('wrong')
     
     # Should print out Missouri
-    print(helper.getSuggestions('Missouri'))
-    print(helper.getSuggestions('missouri'))
+    #print(helper.getSuggestions('Missouri'))
+    #print(helper.getSuggestions('missouri'))
    
     # Should print out a list containing words that are similar to 'test'
-    print(helper.getSuggestions('tess'))
+    #print(helper.getSuggestions('tess'))
 
     # Should only print out capital words that are similar to 'test'
-    print(helper.getSuggestions('Tess'))
+    #print(helper.getSuggestions('Tess'))
     
     # Scans through all the words in a file. If are incorrect words, suggestions are given.
-    def checker(filename):
+    def fileChecker(filename):
+        translator = str.maketrans('', '', string.punctuation)
         allWords = []
+        wrongWords = []
+        listOfSuggestions = []
         with open(filename) as data:
             for line in data:
-                for word in line:
-                    allwords.append(word.rstrip())
-        print(allwords)
+                line = line.translate(translator) #Removes all punctuation
+                words = line.split()
+                for word in words:
+                    allWords.append(word)
+        for i in allWords:
+            if i not in helper:
+                wrongWords.append(i)
+        for x in wrongWords:
+            listOfSuggestions.append(helper.getSuggestions(x))
+        for i in range(len(wrongWords)):
+            print('Words: ' + "'" + wrongWords[i] + "' " + 'List of Suggestions:', str(listOfSuggestions[i]))
+        
+                    
+    fileChecker('sample.txt')
 
-    checker(sample)
-    
-    checker
