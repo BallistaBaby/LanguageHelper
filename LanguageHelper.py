@@ -8,15 +8,22 @@ class LanguageHelper:
 
     def __init__ (self, languageFilename):
         """Initializes the set of all words in the english dictionary"""
+        if not isinstance(languageFilename, str):
+            raise TypeError('The filename must be a string')
         self._words = set()
-        with open(languageFilename) as data:
-            line = data.readline()
-            while line:
-                line = line.rstrip()
-                self._words.add(line)
+        try:
+            with open(languageFilename) as data:
                 line = data.readline()
+                while line:
+                    line = line.rstrip()
+                    self._words.add(line)
+                    line = data.readline()
+        except IOError:
+            print('Please specify the correct name for the dictionary')
 
-    def __contains__(self,query):
+    def __contains__(self, query):
+        if not isinstance(query, str):
+            raise TypeError('The query must be a string')
         """Checks whether the query is a legitimate word"""
         if query in self._words:
             return True
@@ -27,6 +34,8 @@ class LanguageHelper:
 
     def getSuggestions(self,query):
         """Returns a sorted list of all legitimate language words that are precisely one edit away from the query."""
+        if not isinstance(query, str):
+            raise TypeError('The query must be a string')
         self._possible = []
         self._final = []
         self._alphabet = list(string.ascii_lowercase)
@@ -66,21 +75,21 @@ class LanguageHelper:
 if __name__ == '__main__':
     helper = LanguageHelper ('English.txt')
 
-    #if ('dogs' in helper):
-    #    print('Found "dogs"')
+    if ('dogs' in helper):
+        print('Found "dogs"')
 
-    #if ('missouri' in helper):
-    #    print('wrong')
+    if ('missouri' in helper):
+        print('wrong')
     
     # Should print out Missouri
-    #print(helper.getSuggestions('Missouri'))
-    #print(helper.getSuggestions('missouri'))
+    print(helper.getSuggestions('Missouri'))
+    print(helper.getSuggestions('missouri'))
    
     # Should print out a list containing words that are similar to 'test'
-    #print(helper.getSuggestions('tess'))
+    print(helper.getSuggestions('tess'))
 
     # Should only print out capital words that are similar to 'test'
-    #print(helper.getSuggestions('Tess'))
+    print(helper.getSuggestions('Tess'))
     
     # Scans through all the words in a file. If are incorrect words, suggestions are given.
     def fileChecker(filename):
@@ -88,20 +97,28 @@ if __name__ == '__main__':
         allWords = []
         wrongWords = []
         listOfSuggestions = []
-        with open(filename) as data:
-            for line in data:
-                line = line.translate(translator) #Removes all punctuation
-                words = line.split()
-                for word in words:
-                    allWords.append(word)
+        try:
+            with open(filename) as data:
+                for line in data:
+                    line = line.translate(translator) #Removes all punctuation
+                    words = line.split()
+                    for word in words:
+                        allWords.append(word)
+        except IOError:
+            print('Please enter a valid filename')
         for i in allWords:
             if i not in helper:
                 wrongWords.append(i)
         for x in wrongWords:
             listOfSuggestions.append(helper.getSuggestions(x))
         for i in range(len(wrongWords)):
-            print('Words: ' + "'" + wrongWords[i] + "' " + 'List of Suggestions:', str(listOfSuggestions[i]))
+            print('Word: ' + "'" + wrongWords[i] + "', " + 'List of Suggestions:', str(listOfSuggestions[i]))
         
-                    
+    
+    # Should give an error
+    fileChecker('sampl.txt')
+
+    # Checks for spelling errors in files
     fileChecker('sample.txt')
+    fileChecker('sampleLetter.txt')
 
