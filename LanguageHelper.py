@@ -4,8 +4,10 @@ import string
 #########################
 
 class LanguageHelper:
+    """A simple spell checking class"""
 
     def __init__ (self, languageFilename):
+        """Initializes the set of all words in the english dictionary"""
         self._words = set()
         with open(languageFilename) as data:
             line = data.readline()
@@ -15,6 +17,7 @@ class LanguageHelper:
                 line = data.readline()
 
     def __contains__(self,query):
+        """Checks whether the query is a legitimate word"""
         if query in self._words:
             return True
         elif query.lower() in self._words:
@@ -23,6 +26,7 @@ class LanguageHelper:
             return False
 
     def getSuggestions(self,query):
+        """Returns a sorted list of all legitimate language words that are precisely one edit away from the query."""
         self._possible = []
         self._final = []
         self._alphabet = list(string.ascii_lowercase)
@@ -53,7 +57,7 @@ class LanguageHelper:
                 if i not in self._final:
                     self._final.append(i)
         self._final.sort()
-        print(self._final)
+        return self._final
         
 #########################
 #  Unit Testing
@@ -63,5 +67,30 @@ if __name__ == '__main__':
     helper = LanguageHelper ('English.txt')
 
     if ('dogs' in helper):
-        print ('Found "dogs"')
+        print('Found "dogs"')
 
+    if ('missouri' in helper):
+        print('wrong')
+    
+    # Should print out Missouri
+    print(helper.getSuggestions('Missouri'))
+    print(helper.getSuggestions('missouri'))
+   
+    # Should print out a list containing words that are similar to 'test'
+    print(helper.getSuggestions('tess'))
+
+    # Should only print out capital words that are similar to 'test'
+    print(helper.getSuggestions('Tess'))
+    
+    # Scans through all the words in a file. If are incorrect words, suggestions are given.
+    def checker(filename):
+        allWords = []
+        with open(filename) as data:
+            for line in data:
+                for word in line:
+                    allwords.append(word.rstrip())
+        print(allwords)
+
+    checker(sample)
+    
+    checker
