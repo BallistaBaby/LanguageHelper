@@ -40,31 +40,28 @@ class LanguageHelper:
         self._final = []
         self._alphabet = list(string.ascii_lowercase)
         self._alphabet.append('-')
+        self._query = query.lower()
         for i in range((len(query))-1):
-            possible = query[:i]+query[i+1]+query[i]+query[(i+2):]
+            possible = self._query[:i]+self._query[i+1]+self._query[i]+self._query[(i+2):]
             self._possible.append(possible)
         for i in range(len(query)):
-            possible = query[:i] + query[(i+1):]
+            possible = self._query[:i] + self._query[(i+1):]
             self._possible.append(possible)
             for g in range(len(self._alphabet)):
-                possible = query[:i]+self._alphabet[g]+query[(i+1):]
-                possibleAlso = query[:i]+self._alphabet[g]+query[i:]
+                possible = self._query[:i]+self._alphabet[g]+self._query[(i+1):]
+                possibleAlso = self._query[:i]+self._alphabet[g]+self._query[i:]
                 self._possible.append(possible)
                 self._possible.append(possibleAlso)
-        if query.islower() == True:
-            suggestionLength = len(self._possible)
-            for i in range(suggestionLength):
-                self._possible.append(self._possible[i].capitalize())
-        if query.istitle() == True:
-            tempList = self._possible
-            for i in self._possible:
-                tempList = [i.lower() for i in self._possible]
-            for i in tempList:
-                self._possible = [i.capitalize() for i in tempList]
+        suggestionLength = len(self._possible)
+        for i in range(suggestionLength):
+            self._possible.append(self._possible[i].capitalize())
         for i in self._possible:
             if i in self._words:
                 if i not in self._final:
-                    self._final.append(i)
+                    if i != query:
+                        self._final.append(i)
+        if query.istitle() == True:
+            self._final = [i.capitalize() for i in self._final]
         self._final.sort()
         return self._final
         
