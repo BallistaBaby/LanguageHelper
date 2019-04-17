@@ -4,11 +4,11 @@ import string
 #########################
 
 class LanguageHelper:
-    """A simple spell checking class"""
+    """A simple spell checking class that gives suggestions"""
 
     def __init__ (self, languageFilename):
         """Initializes the set of all words in the english dictionary"""
-        if not isinstance(languageFilename, str):
+        if not isinstance(languageFilename, str): # Checks if the filename is entered as a string.
             raise TypeError('The filename must be a string')
         self._words = set()
         try:
@@ -22,9 +22,12 @@ class LanguageHelper:
             print('Please specify the correct name for the dictionary')
 
     def __contains__(self, query):
-        if not isinstance(query, str):
+        """Checks whether the query is a legitimate word
+        
+        The query should be a string.
+        """
+        if not isinstance(query, str): # Checks if the query is entered as a string.
             raise TypeError('The query must be a string')
-        """Checks whether the query is a legitimate word"""
         if query in self._words:
             return True
         elif query.lower() in self._words:
@@ -33,12 +36,14 @@ class LanguageHelper:
             return False
 
     def getSuggestions(self,query):
-        """Returns a sorted list of all legitimate language words that are precisely one edit away from the query."""
-        if not isinstance(query, str):
+        """Returns a sorted list of all legitimate language words that are precisely one edit away from the query.
+        The query should be a string.
+        """
+        if not isinstance(query, str): # Checks if the query is entered as a string.
             raise TypeError('The query must be a string')
         self._possible = []
         self._final = []
-        self._alphabet = list(string.ascii_lowercase)
+        self._alphabet = list(string.ascii_lowercase) # Produces a list of all lowercase letters.
         self._alphabet.append('-')
         self._query = query.lower()
         for i in range((len(query))-1):
@@ -71,12 +76,12 @@ class LanguageHelper:
 
 if __name__ == '__main__':
     helper = LanguageHelper ('English.txt')
-
+    
     if ('dogs' in helper):
         print('Found "dogs"')
 
     if ('missouri' in helper):
-        print('wrong')
+        print('Wrong')
     
     # Should print out Missouri
     print(helper.getSuggestions('Missouri'))
@@ -85,7 +90,7 @@ if __name__ == '__main__':
     # Should print out a list containing words that are similar to 'test'
     print(helper.getSuggestions('tess'))
 
-    # Should only print out capital words that are similar to 'test'
+    # Should only print out a list containing capital words that are similar to 'test'
     print(helper.getSuggestions('Tess'))
     
     # Scans through all the words in a file. If are incorrect words, suggestions are given.
