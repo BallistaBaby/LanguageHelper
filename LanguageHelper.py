@@ -44,7 +44,7 @@ class LanguageHelper:
         self._possible = []
         self._final = []
         self._alphabet = list(string.ascii_lowercase) # Produces a list of all lowercase letters.
-        self._alphabet.append('-')
+        self._alphabet.extend(('-',' '))
         self._query = query.lower()
         for i in range((len(query))-1):
             possible = self._query[:i]+self._query[i+1]+self._query[i]+self._query[(i+2):]
