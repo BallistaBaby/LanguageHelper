@@ -41,29 +41,29 @@ class LanguageHelper:
         """
         if not isinstance(query, str): # Checks if the query is entered as a string.
             raise TypeError('The query must be a string')
-        self._possible = []
-        self._final = []
+        self._possible = [] #List of strings one change away
+        self._final = [] #Final list of suggestions
         self._alphabet = list(string.ascii_lowercase) # Produces a list of all lowercase letters.
         self._alphabet.extend(('-',' '))
         self._query = query.lower()
         for i in range((len(query))-1):
-            possible = self._query[:i]+self._query[i+1]+self._query[i]+self._query[(i+2):]
+            possible = self._query[:i]+self._query[i+1]+self._query[i]+self._query[(i+2):] #Add cases of inverting two letters
             self._possible.append(possible)
         for i in range(len(query)):
-            possible = self._query[:i] + self._query[(i+1):]
+            possible = self._query[:i] + self._query[(i+1):] #Add cases of deleting one letter
             self._possible.append(possible)
             for g in range(len(self._alphabet)):
-                possible = self._query[:i]+self._alphabet[g]+self._query[(i+1):]
-                possibleAlso = self._query[:i]+self._alphabet[g]+self._query[i:]
+                possible = self._query[:i]+self._alphabet[g]+self._query[(i+1):] #Add cases of inserting one letter
+                possibleAlso = self._query[:i]+self._alphabet[g]+self._query[i:] #Add cases of replacing one letter
                 self._possible.append(possible)
                 self._possible.append(possibleAlso)
         suggestionLength = len(self._possible)
         for i in range(suggestionLength):
-            self._possible.append(self._possible[i].capitalize())
+            self._possible.append(self._possible[i].capitalize()) #Add all possible strings, capitalized (doubles list length)
         for i in self._possible:
             if i in self._words:
-                if i not in self._final:
-                    if i != query:
+                if i not in self._final: #Removes duplicates from final list
+                    if i != query: 
                         self._final.append(i)
         if query.islower() == True:
             for i in self._final:
