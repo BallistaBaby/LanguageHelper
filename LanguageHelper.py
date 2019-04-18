@@ -65,6 +65,11 @@ class LanguageHelper:
                 if i not in self._final:
                     if i != query:
                         self._final.append(i)
+        if query.islower() == True:
+            for i in self._final:
+                if i[0].istitle() == True:
+                    if i[0] != query[0].upper():
+                        self._final.remove(i)
         if query.istitle() == True:
             self._final = [i.capitalize() for i in self._final]
         self._final.sort()
